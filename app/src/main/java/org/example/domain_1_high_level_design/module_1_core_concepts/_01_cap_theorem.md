@@ -15,9 +15,9 @@
 
 # _01_cap_theorem
 
-https://www.hellointerview.com/learn/system-design/core-concepts/cap-theorem
-https://www.splunk.com/en_us/blog/learn/cap-theorem.html
-https://www.bmc.com/blogs/cap-theorem/
+- https://www.hellointerview.com/learn/system-design/core-concepts/cap-theorem
+- https://www.splunk.com/en_us/blog/learn/cap-theorem.html
+- https://www.bmc.com/blogs/cap-theorem/
 
 ## What is CAP Theorem?
 

@@ -40,8 +40,8 @@
 
 # _01~01_consistency_patterns
 
-https://systemdesign.one/consistency-patterns/
-https://hackernoon.com/eventual-vs-strong-consistency-in-distributed-databases-282fdad37cf7
+- https://systemdesign.one/consistency-patterns/
+- https://hackernoon.com/eventual-vs-strong-consistency-in-distributed-databases-282fdad37cf7
 
 ## What is Consistency?
 
