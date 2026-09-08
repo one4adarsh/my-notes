@@ -10,7 +10,7 @@
 
 ## module_2_building_blocks
 
-### topic_1:
+### topic_1: [cap_theorem](module_1_core_concepts/_01_cap_theorem.md) 
 
 ## module_3_common_patterns
 
