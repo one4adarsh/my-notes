@@ -12,6 +12,8 @@
 
 ### topic_1: [cap_theorem](module_1_core_concepts/_01_cap_theorem.md) 
 
+#### subtopic_1: [consistency_patterns](module_1_core_concepts/_01~01_consistency_patterns.md)
+
 ## module_3_common_patterns
 
 ### topic_1:
