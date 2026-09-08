@@ -14,6 +14,8 @@
 
 #### subtopic_1: [consistency_patterns](module_1_core_concepts/_01~01_consistency_patterns.md)
 
+### topic_2: [scalability_reliability_availability](module_1_core_concepts/_02_scalability_reliability_availability.md)
+
 ## module_3_common_patterns
 
 ### topic_1:
