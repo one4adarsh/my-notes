@@ -13,3 +13,4 @@ plugins {
 rootProject.name = "my-notes"
 include("app")
 include("lld-jira")
+include("lld-design-patterns")
