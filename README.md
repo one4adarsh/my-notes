@@ -26,6 +26,9 @@ my-notes/
 │   ├── build.gradle.kts
 │   ├── openspec/                          # OpenSpec config
 │   └── src/{main,test}/java/org/example/lldjira/
+├── lld-meeting-room-scheduling-system/   # Meeting room scheduling LLD exercise
+│   ├── build.gradle.kts
+│   └── src/{main,test}/java/org/example/
 ├── gradle/
 │   ├── libs.versions.toml            # shared dependency version catalog
 │   └── wrapper/
@@ -35,11 +38,12 @@ my-notes/
 
 ## Modules
 
-| Module                | Main class                      | Description                                                                 |
-|-----------------------|---------------------------------|-----------------------------------------------------------------------------|
-| `app`                 | `org.example.App`               | Markdown notes for HLD & LLD, plus a sample CLI (uses Guava)                |
-| `lld-design-patterns` | `org.example.LldDesignPatterns` | Runnable examples of design patterns, one package + README per pattern      |
-| `lld-jira`            | `org.example.lldjira.LldJira`   | Jira-like system LLD exercise; changes are proposed and tracked via OpenSpec |
+| Module                               | Main class                                   | Description                                                                  |
+|--------------------------------------|----------------------------------------------|------------------------------------------------------------------------------|
+| `app`                                | `org.example.App`                            | Markdown notes for HLD & LLD, plus a sample CLI (uses Guava)                 |
+| `lld-design-patterns`                | `org.example.LldDesignPatterns`              | Runnable examples of design patterns, one package + README per pattern       |
+| `lld-jira`                           | `org.example.lldjira.LldJira`                | Jira-like system LLD exercise; changes are proposed and tracked via OpenSpec |
+| `lld-meeting-room-scheduling-system` | `org.example.LldMeetingRoomSchedulingSystem` | Meeting room scheduling system LLD exercise                                  |
 
 ## Notes
 
@@ -74,6 +78,7 @@ Without `-PmainClass` the module's default entry point (`org.example.LldDesignPa
 ./gradlew :app:run
 ./gradlew :lld-design-patterns:run
 ./gradlew :lld-jira:run
+./gradlew :lld-meeting-room-scheduling-system:run
 ```
 
 > **Note:** when copy-pasting a command that has a trailing `# comment` into an interactive
@@ -85,6 +90,7 @@ Without `-PmainClass` the module's default entry point (`org.example.LldDesignPa
 ```sh
 ./gradlew test               # run tests in all modules
 ./gradlew :lld-jira:test     # run tests for a single module
+./gradlew :lld-meeting-room-scheduling-system:test
 ```
 
 HTML reports are written to `<module>/build/reports/tests/test/index.html`.
