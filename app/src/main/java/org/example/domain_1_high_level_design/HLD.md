@@ -20,7 +20,7 @@
 
 ## module_3_common_patterns
 
-### topic_1:
+### topic_1: [scaling_reads](module_3_common_patterns/_01_scaling_reads.md)
 
 ## module_4_key_technologies
 
