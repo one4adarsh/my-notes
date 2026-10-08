@@ -22,6 +22,8 @@
 
 ### topic_1: [scaling_reads](module_3_common_patterns/_01_scaling_reads.md)
 
+### topic_2: [scaling_writes](module_3_common_patterns/_02_scaling_writes.md)
+
 ## module_4_key_technologies
 
 ### topic_1:
