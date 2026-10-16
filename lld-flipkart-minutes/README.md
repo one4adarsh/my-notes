@@ -246,8 +246,41 @@ class InvalidStateTransitionException extends QuickCommerceException {
 
 ## Step 5 - Extensibility
 
-- Notifications → OrderEventListener observer, dispatcher/service publish on each transition.
-- Ratings/Dashboard → RatingService + PriorityQueue over partners.
-- Auto-cancel 30 min → ScheduledExecutorService on placeOrder; the task calls order.cancel() which is already
-  state-guarded, so a delivered/picked-up order is safely ignored.
-- Nearest partner → new PartnerAssignmentStrategy, zero changes elsewhere.
+> Start bonus features only after P0 is green (demo + tests). Order is by **value ÷ time** and **dependencies**:
+> each item builds on the one before, and each one can be demoed on its own.
+
+### Bonus Features (explicit, in implementation order)
+
+| #  | Feature              | Requirement (from prompt)                                                        | Design                                                                                                                                                                                                                                                                | Pattern                     | Why this order                                                                                                                                                             |
+|----|----------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| E1 | Notifications        | Notify customers and partners (simulated logs) on order status changes           | `OrderEventListener` interface + `LoggingNotifier`. `QuickCommerceService` / `OrderDispatcher` publish `(order, oldStatus, newStatus)` after each transition. Listeners are kept in a `CopyOnWriteArrayList`                                                          | Observer                    | Smallest change, touches every transition, shows up right away in demo output. B2–B4 events reuse it for free                                                              |
+| E2 | Auto-cancel (30 min) | If no partner picks up within 30 min of creation, cancel whether assigned or not | `ScheduledExecutorService` schedules a task in `placeOrder` using `Order.createdAt`. The task calls `service.cancelOrder(id)`, not `order.cancel()`, so the dispatcher frees the partner and reassigns. Make the timeout configurable (`Duration`)                    | Scheduler / Command         | Reuses the existing cancel path and state guard, so it is mostly wiring. The timer thread vs. `pickupOrder` race is already closed by `Order`'s `synchronized` transitions |
+| E3 | Ratings              | Customers rate partners after successful delivery                                | `RatingService.rate(customerId, orderId, stars)`. Guards: order is `DELIVERED`, `order.customerId == customerId`, one rating per order, `1 ≤ stars ≤ 5`. Partner keeps `deliveryCount` (`AtomicInteger`) and a rating sum and count, so the average stays thread-safe | New service + facade guards | Dashboard (B4) needs this data                                                                                                                                             |
+| E4 | Dashboard            | Top partners by number of deliveries and ratings                                 | `DashboardService.topPartners(n)` sorts a snapshot of `findAll()` with a `PartnerRankingStrategy` (default: `avgRating` desc, then `deliveryCount` desc)                                                                                                              | Strategy / Comparator       | Read-only query; depends on B3                                                                                                                                             |
+
+### Probes the interviewer will likely invent (implicit, in likely order)
+
+> Usually you only explain these. Implement one only if the interviewer asks. Each one should be a local change, which proves the design.
+
+| #  | Probe                                      | Change required                                                                                                      | Untouched                                                           |
+|----|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| I1 | Assign the nearest / highest-rated partner | New `PartnerAssignmentStrategy` impl (+ `location` on `Order`/`DeliveryPartner` for nearest)                         | Dispatcher, service, models' state machines                         |
+| I2 | Partner goes offline / off-shift           | Add `OFFLINE` to `PartnerStatus`; `goOnline()`/`goOffline()` on partner; `isAvailable()` excludes it                 | `findAvailable()`, strategy, dispatcher work automatically          |
+| I3 | Priority orders                            | Swap `ConcurrentLinkedQueue` → `PriorityBlockingQueue<Order>` with a comparator in `OrderDispatcher`                 | Everything outside the dispatcher                                   |
+| I4 | Partner can carry N orders (batching)      | `DeliveryPartner`: `currentOrderId` → bounded `Set<String>`; `isAvailable()` = `size < capacity`; `release(orderId)` | Strategy, repository; dispatcher only passes `orderId` to `release` |
+| I5 | New order state (e.g. `OUT_FOR_DELIVERY`)  | Add enum value + one guarded transition in `Order`; one facade method                                                | Dispatcher, repositories                                            |
+| I6 | Multiple items per order                   | `itemName` → `List<String> items` on `Order`                                                                         | Whole workflow                                                      |
+| I7 | Swap in-memory for a real DB               | New `Repository<T>` impl; change wiring in `bootstrap()`                                                             | Service, dispatcher (constructor injection)                         |
+
+### Patterns to name
+
+- Already in P0:
+  - Facade (`QuickCommerceService`)
+  - Strategy (`PartnerAssignmentStrategy`)
+  - Repository
+  - Template (abstract `InMemoryRepository` + `idExtractor`)
+  - State machine (guarded transitions in models)
+- Added in Step 5:
+  - Observer (B1)
+  - Scheduler/Command (B2)
+  - Strategy/Comparator (B4)
