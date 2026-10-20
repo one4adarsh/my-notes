@@ -26,6 +26,8 @@
 
 ### topic_3: [dealing_with_contention](module_3_common_patterns/_03_dealing_with_contention.md)
 
+### topic_4: [real_time_updates](module_3_common_patterns/_04_real_time_updates.md)
+
 ## module_4_key_technologies
 
 ### topic_1:
