@@ -24,6 +24,8 @@
 
 ### topic_2: [scaling_writes](module_3_common_patterns/_02_scaling_writes.md)
 
+### topic_3: [dealing_with_contention](module_3_common_patterns/_03_dealing_with_contention.md)
+
 ## module_4_key_technologies
 
 ### topic_1:
